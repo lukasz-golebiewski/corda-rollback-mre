@@ -7,7 +7,6 @@ import net.corda.core.flows.FlowLogic
 import net.corda.core.flows.InitiatingFlow
 import net.corda.core.transactions.TransactionBuilder
 
-
 @InitiatingFlow
 open class SubFlow(val notificationState: NotificationState) : FlowLogic<Unit>() {
 
@@ -17,6 +16,7 @@ open class SubFlow(val notificationState: NotificationState) : FlowLogic<Unit>()
         val initialSigners = setOf(ourIdentity.owningKey)
 
         val txBuilder = TransactionBuilder(notary = getNotary())
+            .addCommand(NotificationContract.Commands.Create, ourIdentity.owningKey)
             .addOutputState(notificationState)
 
         txBuilder.verify(serviceHub)

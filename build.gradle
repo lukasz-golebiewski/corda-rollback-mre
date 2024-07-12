@@ -1,3 +1,7 @@
+apply plugin: 'kotlin'
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'net.corda.plugins.quasar-utils'
+
 buildscript {
     ext {
         corda_release_group = 'net.corda'
@@ -29,13 +33,20 @@ buildscript {
     }
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'net.corda.plugins.cordapp'
-//apply plugin: 'net.corda.plugins.quasar-utils'
-
 allprojects {
     apply from: "${rootProject.projectDir}/repositories.gradle"
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+        kotlinOptions {
+            languageVersion = "1.2"
+            apiVersion = "1.2"
+            jvmTarget = "1.8"
+            javaParameters = true   // Useful for reflection.
+            freeCompilerArgs = ['-Xjvm-default=enable']
+        }
+    }
 }
+
 dependencies {
     // Kotlin.
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -75,15 +86,3 @@ configurations {
 dependencies {
     testOutput sourceSets.test.output
 }
-
-/*
-publishing {
-    publications {
-        jar(MavenPublication) {
-            groupId = 'com.test'
-            version = "${project.version}-${System.getenv('CI_COMMIT_SHORT_SHA')}-SNAPSHOT"
-            from components['java']
-        }
-    }
-}
- */
