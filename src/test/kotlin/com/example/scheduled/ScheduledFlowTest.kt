@@ -77,5 +77,7 @@ class ScheduledFlowTest {
         (listOf(node1, node2)).forEach { cordaNode ->
             (cordaNode.services.clock as TestClock).setTo(triggerAt)
         }
+
+        mockNetwork.runNetwork()
     }
 }
